@@ -37,7 +37,7 @@ lookup_fruit_name = dict(zip(fruits.fruit_label.unique(), fruits.fruit_name.uniq
 # ### Examining the data
 
 # In[ ]:
-
+#
 # plotting a scatter matrix
 from matplotlib import cm
 
