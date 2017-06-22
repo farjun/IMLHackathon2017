@@ -33,8 +33,16 @@ def main():
 
     #init vectorizer
     vectorizer = CountVectorizer()
-    x = vectorizer.fit_transform(haaretzHeadlings['Headers'])
-    y = vectorizer.fit_transform(israelHayomHeadlines['Headers'])
+    Vheaders1 = vectorizer.fit_transform(haaretzHeadlings['Headers'])
+    Vheaders2 = vectorizer.fit_transform(israelHayomHeadlines['Headers'])
+    print('---------------')
+    print(Vheaders2)
+    print('---------------')
+    print(Vheaders2.shape)
+    print('---------------')
+    print(Vheaders1)
+
+
 
 if __name__ == '__main__':
     main()
