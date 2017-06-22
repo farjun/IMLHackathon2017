@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import re
+
 #preproccessibng
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -13,6 +14,9 @@ from nltk.corpus import stopwords
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
+from sklearn.svm import OneClassSVM
+from sklearn.linear_model import SGDClassifier
 
 def readFiles():
     haaretzHeadlings = pd.read_csv("./Training set/Headlines/haaretz.csv",names = ['Headers'])
@@ -97,14 +101,24 @@ x_train, x_test, y_train, y_test = getTrainSplit()
 
 nb = MultinomialNB()
 knn = KNeighborsClassifier(n_neighbors=1)
-svc = SVC(random_state=1)
+svc = SVC(kernel='linear')
+lsvc = LinearSVC()
+sig = SGDClassifier()
+ocs = OneClassSVM()
 
 nb.fit(x_train, y_train)
 knn.fit(x_train,y_train)
 svc.fit(x_train,y_train)
+lsvc.fit(x_train,y_train)
+sig.fit(x_train,y_train)
+ocs.fit(x_train,y_train)
 
 print("MultinomialNB: ",nb.score(x_test, y_test))
 print("KNeighborsClassifier: ",knn.score(x_test, y_test))
 print("SVC: ", svc.score(x_test, y_test))
+print("Lin SVC: ", lsvc.score(x_test, y_test))
+print("Sig SVC: ", sig.score(x_test, y_test))
+#print("oneClassSvm: ", ocs.score(x_test, y_test))
 
-accuracy_plot(nb)
+
+#accuracy_plot(nb)
