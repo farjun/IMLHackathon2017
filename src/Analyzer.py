@@ -11,21 +11,32 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 
 def readFiles():
-    haaretzHeadlings = pd.read_csv("./Training set/Headlines/haaretz.csv",names = ['Headres'])
-    israelHayomHeadlines = pd.read_csv("./Training set/Headlines/israelhayom.csv",names=['Headres'])
+    haaretzHeadlings = pd.read_csv("./Training set/Headlines/haaretz.csv",names = ['Headers'])
+    israelHayomHeadlines = pd.read_csv("./Training set/Headlines/israelhayom.csv",names=['Headers'])
     return haaretzHeadlings, israelHayomHeadlines
 
-haaretzHeadlings ,israelHayomHeadlines = readFiles()
 
 
-def normalize_text(s):
+def normelizeText(s):
     s = s.lower()
     s = re.sub('\s\W', ' ', s)
     s = re.sub('\W\s', ' ', s)
     s = re.sub('\s+', ' ', s)
     return s
 
-print(haaretzHeadlings)
-haaretzHeadlings = [normalize_text(s) for s in haaretzHeadlings]
-print("sdkjhfs",haaretzHeadlings)
+
+def main():
+    haaretzHeadlings, israelHayomHeadlines = readFiles()
+    print(haaretzHeadlings)
+    print(israelHayomHeadlines)
+
+
+    #init vectorizer
+    vectorizer = CountVectorizer()
+    x = vectorizer.fit_transform(haaretzHeadlings['Headers'])
+    y = vectorizer.fit_transform(israelHayomHeadlines['Headers'])
+
+if __name__ == '__main__':
+    main()
+
 
