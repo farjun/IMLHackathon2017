@@ -11,9 +11,9 @@ def answer_zero():
 
 
 def answer_one():
-    np.append(cancer.feature_names, ['target'])
+    col = np.append(cancer.feature_names, ['target'])
     data = np.vstack((cancer.data.T, cancer.target)).T
-    return pd.DataFrame(columns=cancer.feature_names, data=data).to_csv()
+    return pd.DataFrame(columns=col, data=data).to_csv()
 
 def answer_two():
     cancerdf = answer_one()

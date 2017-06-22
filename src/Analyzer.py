@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import re
 #preproccessibng
-
+pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
@@ -13,7 +13,10 @@ from sklearn.feature_extraction.text import CountVectorizer
 def readFiles():
     haaretzHeadlings = pd.read_csv("./Training set/Headlines/haaretz.csv",names = ['Headers'])
     israelHayomHeadlines = pd.read_csv("./Training set/Headlines/israelhayom.csv",names=['Headers'])
-    return haaretzHeadlings, israelHayomHeadlines
+    haaretzHeadlings['tag'] = pd.Series(0, index=haaretzHeadlings.index)
+    israelHayomHeadlines['tag'] = pd.Series(1,index=israelHayomHeadlines.index)
+    res = pd.concat([haaretzHeadlings,israelHayomHeadlines])
+    return res
 
 
 
@@ -26,21 +29,16 @@ def normelizeText(s):
 
 
 def main():
-    haaretzHeadlings, israelHayomHeadlines = readFiles()
-    print(haaretzHeadlings)
-    print(israelHayomHeadlines)
+    all = readFiles()
+    print(all)
 
 
     #init vectorizer
     vectorizer = CountVectorizer()
-    Vheaders1 = vectorizer.fit_transform(haaretzHeadlings['Headers'])
-    Vheaders2 = vectorizer.fit_transform(israelHayomHeadlines['Headers'])
-    print('---------------')
-    print(Vheaders2)
-    print('---------------')
-    print(Vheaders2.shape)
+    Vheaders1 = vectorizer.fit_transform(all['Headers'])
     print('---------------')
     print(Vheaders1)
+
 
 
 
