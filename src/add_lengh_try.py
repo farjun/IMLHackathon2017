@@ -2,6 +2,7 @@ import create_dataframe as data1
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import train_test_split
+import scipy
 
 
 df = data1.word_matrix_dataframe()
@@ -25,6 +26,11 @@ def get_dataframe_with_lengh_no_label():
     del df2['the_label__']
     return df2
 
-# print(get_dataframe_with_lengh_and_label().head())
-print(get_dataframe_with_lengh_no_label().head())
+def get_data_as_sparse_matrix():
+    return scipy.sparse.csr_matrix(df.values)
+
+def get_data_as_sparse_matrix_no_label():
+    df2 = df.copy(True)
+    del df2['the_label__']
+    return scipy.sparse.csr_matrix(df2.values)
 
