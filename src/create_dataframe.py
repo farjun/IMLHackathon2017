@@ -29,8 +29,20 @@ for headline in israelHayomHeadlines['Headers']:
 
 vect = CountVectorizer(min_df=0., max_df=1.0)
 X = vect.fit_transform(list_them_all)
-print(type(X))
+# print(type(X))
 # print(DataFrame(X.A, columns=vect.get_feature_names()).to_string())
 the_final_df = DataFrame(X.A, columns=vect.get_feature_names());
 the_final_df['the_label__'] = list(base_df['label'])
-print(the_final_df.head())
+# print(the_final_df.head())
+
+
+def word_matrix_dataframe():
+    return the_final_df
+
+def word_matrix():
+    return X
+def base_df():
+    return base_df
+
+
+print(word_matrix_dataframe().head())
