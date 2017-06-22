@@ -6,23 +6,19 @@ from sklearn.neighbors import KNeighborsClassifier
 
 cancer = load_breast_cancer()
 
-
 def answer_zero():
     return len(cancer.feature_names)
 
 
 def answer_one():
-    columns = np.append(cancer.feature_names, ['target'])
+    np.append(cancer.feature_names, ['target'])
     data = np.vstack((cancer.data.T, cancer.target)).T
-
-    return pd.DataFrame(columns=columns, data=data)
-
+    return pd.DataFrame(columns=cancer.feature_names, data=data).to_csv()
 
 def answer_two():
     cancerdf = answer_one()
     targets = cancerdf.target
     lengths = [len(cancerdf[targets == 0]), len(cancerdf[targets == 1])]
-
     return pd.Series(lengths, index=['malignant', 'benign'])
 
 
@@ -56,7 +52,6 @@ def answer_six():
 def answer_seven():
     _, X_test, _, _ = answer_four()
     knn = answer_five()
-
     return knn.predict(X_test)
 
 
@@ -111,4 +106,4 @@ def accuracy_plot():
     plt.show()
 
 
-accuracy_plot()
+print(answer_three())
