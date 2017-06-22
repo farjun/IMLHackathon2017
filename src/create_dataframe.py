@@ -7,8 +7,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def readFiles():
-    haaretzHeadlings = pd.read_csv("/cs/usr/omribloch/PycharmProjects/IMLHackathon2017/Training set/Headlines/haaretz.csv", names = ['Headers'])
-    israelHayomHeadlines = pd.read_csv("/cs/usr/omribloch/PycharmProjects/IMLHackathon2017/Training set/Headlines/israelhayom.csv", names=['Headers'])
+    haaretzHeadlings = pd.read_csv("./Training set/Headlines/haaretz.csv", names = ['Headers'])
+    israelHayomHeadlines = pd.read_csv("./Training set/Headlines/israelhayom.csv", names=['Headers'])
     return haaretzHeadlings, israelHayomHeadlines
 
 haaretzHeadlings ,israelHayomHeadlines = readFiles()
