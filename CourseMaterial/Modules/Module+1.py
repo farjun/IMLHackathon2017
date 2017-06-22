@@ -1,6 +1,11 @@
 
 # coding: utf-8
 
+# ---
+# 
+# _You are currently looking at **version 1.0** of this notebook. To download notebooks and datafiles, as well as get help on Jupyter notebooks in the Coursera platform, visit the [Jupyter Notebook FAQ](https://www.coursera.org/learn/python-machine-learning/resources/bANLa) course resource._
+# 
+# ---
 
 # ## Applied Machine Learning, Module 1:  A simple classification task
 
@@ -11,9 +16,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn import train_test_split
+from sklearn.model_selection import train_test_split
 
-fruits = pd.read_table('course3_downloads/course3_downloads/fruit_data_with_colors.txt')
+fruits = pd.read_table('course3_download/course3_download/fruit_data_with_colors.txt')
 
 
 # In[ ]:
@@ -24,8 +29,7 @@ fruits.head()
 # In[ ]:
 
 # create a mapping from fruit label value to fruit name to make results easier to interpret
-lookup_fruit_name = dict(zip(fruits.fruit_label/cs/usr/omerbh1/Documents/year2/OS/excercises/OS.unique(), fruits.fruit_name.unique()))
-lookup_fruit_name
+lookup_fruit_name = dict(zip(fruits.fruit_label.unique(), fruits.fruit_name.unique()))   
 
 
 # The file contains the mass, height, and width of a selection of oranges, lemons and apples. The heights were measured along the core of the fruit. The widths were the widest width perpendicular to the height.
@@ -33,7 +37,7 @@ lookup_fruit_name
 # ### Examining the data
 
 # In[ ]:
-
+#
 # plotting a scatter matrix
 from matplotlib import cm
 
