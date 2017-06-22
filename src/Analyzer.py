@@ -1,17 +1,22 @@
 import numpy as np
 import pandas as pd
 import re
+
 #preproccessibng
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
 
 #algorithems
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
+from sklearn.svm import OneClassSVM
+from sklearn.linear_model import SGDClassifier
 
 def readFiles():
     haaretzHeadlings = pd.read_csv("./Training set/Headlines/haaretz.csv",names = ['Headers'])
@@ -32,8 +37,7 @@ def normelizeText(s):
 
 def getVectores():
     res = readFiles()
-
-    vectorizer = CountVectorizer(stop_words='english')
+    vectorizer = TfidfVectorizer()
     x = vectorizer.fit_transform(res['Headers'])
     encoder = LabelEncoder()
     y = encoder.fit_transform(res['tag'])
@@ -43,34 +47,12 @@ def getTrainSplit():
     x,y = getVectores()
     return train_test_split(x, y, test_size=0.2,random_state = 0)
 
-######################## main ###################################
-x_train, x_test, y_train, y_test = getTrainSplit()
-
-nb = MultinomialNB(alpha=.11)
-knn = KNeighborsClassifier(n_neighbors=1)
-svc = SVC(random_state=0)
-
-nb.fit(x_train, y_train)
-knn.fit(x_train,y_train)
-svc.fit(x_train,y_train)
-
-print("MultinomialNB: ",nb.score(x_test, y_test))
-print("KNeighborsClassifier: ",knn.score(x_test, y_test))
-print("SVC: ", svc.score(x_test, y_test))
-
-
-###################################################################3
 
 #change if you want to see another algorithem Chart
-def getAlgo():
-    return nb
-
-def accuracy_plot():
+def accuracy_plot(Algo):
     import matplotlib.pyplot as plt
 
     X_train, X_test, y_train, y_test = getTrainSplit()
-
-    Algo = getAlgo()
 
     # Find the training and testing accuracies by target value (i.e. malignant, benign)
     mal_train_X = X_train[y_train == 0]
@@ -109,4 +91,34 @@ def accuracy_plot():
     plt.show()
 
 
-#accuracy_plot()
+
+
+# x,y = getVectores()
+# tf_transformer = TfidfTransformer(use_idf=False).fit(x)
+# X_train_tf = tf_transformer.transform(x)
+
+x_train, x_test, y_train, y_test = getTrainSplit()
+
+nb = MultinomialNB()
+knn = KNeighborsClassifier(n_neighbors=1)
+svc = SVC(kernel='linear')
+lsvc = LinearSVC()
+sig = SGDClassifier()
+ocs = OneClassSVM()
+
+nb.fit(x_train, y_train)
+knn.fit(x_train,y_train)
+svc.fit(x_train,y_train)
+lsvc.fit(x_train,y_train)
+sig.fit(x_train,y_train)
+ocs.fit(x_train,y_train)
+
+print("MultinomialNB: ",nb.score(x_test, y_test))
+print("KNeighborsClassifier: ",knn.score(x_test, y_test))
+print("SVC: ", svc.score(x_test, y_test))
+print("Lin SVC: ", lsvc.score(x_test, y_test))
+print("Sig SVC: ", sig.score(x_test, y_test))
+#print("oneClassSvm: ", ocs.score(x_test, y_test))
+
+
+#accuracy_plot(nb)
