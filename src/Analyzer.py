@@ -2,22 +2,21 @@ import numpy as np
 import pandas as pd
 import re
 #preproccessibng
-pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
 #algorithems
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
 
 def readFiles():
     haaretzHeadlings = pd.read_csv("./Training set/Headlines/haaretz.csv",names = ['Headers'])
     israelHayomHeadlines = pd.read_csv("./Training set/Headlines/israelhayom.csv",names=['Headers'])
-    haaretzHeadlings['tag'] = pd.Series(0, index=haaretzHeadlings.index)
-    israelHayomHeadlines['tag'] = pd.Series(1,index=israelHayomHeadlines.index)
-    res = pd.concat([haaretzHeadlings,israelHayomHeadlines])
+    haaretzHeadlings['tag'] = pd.Series('H', index=haaretzHeadlings.index)
+    israelHayomHeadlines['tag'] = pd.Series('I',index=israelHayomHeadlines.index)
+    res = pd.DataFrame(pd.concat([haaretzHeadlings,israelHayomHeadlines]))
     return res
-
 
 
 def normelizeText(s):
@@ -28,21 +27,17 @@ def normelizeText(s):
     return s
 
 
-def main():
-    all = readFiles()
-    print(all)
+
+if __name__ == '__main__':
+    res = readFiles()
 
 
     #init vectorizer
     vectorizer = CountVectorizer()
-    Vheaders1 = vectorizer.fit_transform(all['Headers'])
-    print('---------------')
-    print(Vheaders1)
-
-
-
-
-if __name__ == '__main__':
-    main()
-
-
+    x = vectorizer.fit_transform(res['Headers'])
+    encoder = LabelEncoder()
+    y = encoder.fit_transform(res['tag'])
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+    nb = MultinomialNB()
+    nb.fit(x_train, y_train)
+    print(nb.score(x_test, y_test))
