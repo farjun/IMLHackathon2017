@@ -7,6 +7,10 @@ from sklearn.model_selection import train_test_split
 df = data1.word_matrix_dataframe()
 matrix = data1.word_matrix()
 
+import multi_classifier as ms
+supClas = ms.SuperClassifier()
+supClas.fit(data1.get_final_df_no_labeles(), df['the_label__'])
+
 titles = df.columns
 print(titles)
 print(len(titles))

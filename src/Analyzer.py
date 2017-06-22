@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import re
+from nltk import bigrams
 
 #preproccessibng
 from sklearn.model_selection import train_test_split
@@ -17,11 +18,19 @@ from sklearn.svm import SVC
 from sklearn.svm import LinearSVC
 from sklearn.svm import OneClassSVM
 from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LinearRegression
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.neural_network import MLPClassifier
+
+#other
+
 
 def readFiles():
     haaretzHeadlings = pd.read_csv("./Training set/Headlines/haaretz.csv",names = ['Headers'])
     israelHayomHeadlines = pd.read_csv("./Training set/Headlines/israelhayom.csv",names=['Headers'])
-
+    haaretzHeadlings['length'] = haaretzHeadlings['Headers'].str.len()
+    israelHayomHeadlines['length'] = israelHayomHeadlines['Headers'].str.len()
     haaretzHeadlings['tag'] = pd.Series('H', index=haaretzHeadlings.index)
     israelHayomHeadlines['tag'] = pd.Series('I',index=israelHayomHeadlines.index)
     res = pd.DataFrame(pd.concat([haaretzHeadlings,israelHayomHeadlines]))
@@ -37,14 +46,16 @@ def normelizeText(s):
 
 def getVectores():
     res = readFiles()
-    vectorizer = TfidfVectorizer()
+    vectorizer = CountVectorizer()
     x = vectorizer.fit_transform(res['Headers'])
+    #z = pd.DataFrame(res['length'].append(x))
     encoder = LabelEncoder()
     y = encoder.fit_transform(res['tag'])
     return x,y
 
 def getTrainSplit():
     x,y = getVectores()
+    print(x)
     return train_test_split(x, y, test_size=0.2,random_state = 0)
 
 
@@ -98,13 +109,16 @@ def accuracy_plot(Algo):
 # X_train_tf = tf_transformer.transform(x)
 
 x_train, x_test, y_train, y_test = getTrainSplit()
-
 nb = MultinomialNB()
 knn = KNeighborsClassifier(n_neighbors=1)
 svc = SVC(kernel='linear')
 lsvc = LinearSVC()
 sig = SGDClassifier()
 ocs = OneClassSVM()
+linReg = LinearRegression(n_jobs=1)
+logReg = LogisticRegression(n_jobs=1)
+ovrc = OneVsRestClassifier(estimator=logReg, n_jobs=2)
+#mlp = MLPClassifier(random_state=1, warm_start=True)
 
 nb.fit(x_train, y_train)
 knn.fit(x_train,y_train)
@@ -112,13 +126,23 @@ svc.fit(x_train,y_train)
 lsvc.fit(x_train,y_train)
 sig.fit(x_train,y_train)
 ocs.fit(x_train,y_train)
+ovrc.fit(x_train,y_train)
+linReg.fit(x_train,y_train)
+logReg.fit(x_train,y_train)
+#mlp.fit(x_train,y_train)
 
 print("MultinomialNB: ",nb.score(x_test, y_test))
 print("KNeighborsClassifier: ",knn.score(x_test, y_test))
 print("SVC: ", svc.score(x_test, y_test))
+print("OneVsRestClassifier: ", ovrc.score(x_test, y_test))
 print("Lin SVC: ", lsvc.score(x_test, y_test))
 print("Sig SVC: ", sig.score(x_test, y_test))
-#print("oneClassSvm: ", ocs.score(x_test, y_test))
+print("LinearRegression: ", linReg.score(x_test, y_test))
+print("LogisticRegression: ", logReg.score(x_test, y_test))
+
+#print("MLPClassifier: ", mlp.score(x_test, y_test))
 
 
 #accuracy_plot(nb)
+
+
