@@ -4,6 +4,7 @@ import re as re
 
 from pandas import DataFrame
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 def readFiles():
     haaretzHeadlings = pd.read_csv("/cs/usr/omribloch/PycharmProjects/IMLHackathon2017/Training set/Headlines/haaretz.csv", names = ['Headers'])
@@ -28,6 +29,7 @@ for headline in israelHayomHeadlines['Headers']:
 
 
 vect = CountVectorizer(min_df=0., max_df=1.0)
+# vect = TfidfVectorizer(min_df=0., max_df=1.0)
 X = vect.fit_transform(list_them_all)
 # print(type(X))
 # print(DataFrame(X.A, columns=vect.get_feature_names()).to_string())
