@@ -12,8 +12,8 @@ def readFiles():
     return haaretzHeadlings, israelHayomHeadlines
 
 haaretzHeadlings ,israelHayomHeadlines = readFiles()
-haaretzHeadlings['label'] = 0;
-israelHayomHeadlines['label'] = 1;
+haaretzHeadlings['label'] = 0
+israelHayomHeadlines['label'] = 1
 
 frames = [haaretzHeadlings, israelHayomHeadlines]
 base_df = pd.concat(frames)
@@ -31,9 +31,10 @@ for headline in israelHayomHeadlines['Headers']:
 vect = CountVectorizer(min_df=0., max_df=1.0)
 # vect = TfidfVectorizer(min_df=0., max_df=1.0)
 X = vect.fit_transform(list_them_all)
+
 # print(type(X))
 # print(DataFrame(X.A, columns=vect.get_feature_names()).to_string())
-the_final_df = DataFrame(X.A, columns=vect.get_feature_names());
+the_final_df = DataFrame(X.A, columns=vect.get_feature_names())
 # print(the_final_df.head())
 the_final_df['the_label__'] = list(base_df['label'])
 # print(the_final_df.head())

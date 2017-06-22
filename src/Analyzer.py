@@ -1,11 +1,14 @@
 import numpy as np
 import pandas as pd
 import re
+import src.add_lengh_try as omri
 from nltk import bigrams
+from scipy.sparse import coo_matrix, hstack, scipy
 
 #preproccessibng
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
@@ -46,17 +49,20 @@ def normelizeText(s):
 
 def getVectores():
     res = readFiles()
-    vectorizer = CountVectorizer()
-    x = vectorizer.fit_transform(res['Headers'])
-    #z = pd.DataFrame(res['length'].append(x))
+    vectorizer = CountVectorizer(ngram_range=(1,2))
+    x = vectorizer.fit_transform(list(res['Headers']))
+    df = pd.DataFrame(x.A, columns=vectorizer.get_feature_names())
+    lengh = np.sum(df, 1)
+    df['length'] = lengh
+    z2 = scipy.sparse.csr_matrix(df.values)
+
     encoder = LabelEncoder()
     y = encoder.fit_transform(res['tag'])
-    return x,y
+    return z2,y
 
 def getTrainSplit():
     x,y = getVectores()
-    print(x)
-    return train_test_split(x, y, test_size=0.2,random_state = 0)
+    return train_test_split(x, y, test_size = 0.5,random_state = 0)
 
 
 #change if you want to see another algorithem Chart

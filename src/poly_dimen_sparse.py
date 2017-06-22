@@ -1,6 +1,6 @@
 import numpy as np
-import create_dataframe as data1
-import scipy as scipy
+
+import scipy
 
 
 matrix = data1.word_matrix()
