@@ -16,6 +16,7 @@ from sklearn.svm import SVC
 def readFiles():
     haaretzHeadlings = pd.read_csv("./Training set/Headlines/haaretz.csv",names = ['Headers'])
     israelHayomHeadlines = pd.read_csv("./Training set/Headlines/israelhayom.csv",names=['Headers'])
+
     haaretzHeadlings['tag'] = pd.Series('H', index=haaretzHeadlings.index)
     israelHayomHeadlines['tag'] = pd.Series('I',index=israelHayomHeadlines.index)
     res = pd.DataFrame(pd.concat([haaretzHeadlings,israelHayomHeadlines]))
@@ -31,7 +32,8 @@ def normelizeText(s):
 
 def getVectores():
     res = readFiles()
-    vectorizer = CountVectorizer()
+
+    vectorizer = CountVectorizer(stop_words='english')
     x = vectorizer.fit_transform(res['Headers'])
     encoder = LabelEncoder()
     y = encoder.fit_transform(res['tag'])
@@ -41,11 +43,10 @@ def getTrainSplit():
     x,y = getVectores()
     return train_test_split(x, y, test_size=0.2,random_state = 0)
 
-
-
+######################## main ###################################
 x_train, x_test, y_train, y_test = getTrainSplit()
 
-nb = MultinomialNB()
+nb = MultinomialNB(alpha=.11)
 knn = KNeighborsClassifier(n_neighbors=1)
 svc = SVC(random_state=0)
 
@@ -56,6 +57,9 @@ svc.fit(x_train,y_train)
 print("MultinomialNB: ",nb.score(x_test, y_test))
 print("KNeighborsClassifier: ",knn.score(x_test, y_test))
 print("SVC: ", svc.score(x_test, y_test))
+
+
+###################################################################3
 
 #change if you want to see another algorithem Chart
 def getAlgo():
@@ -105,4 +109,4 @@ def accuracy_plot():
     plt.show()
 
 
-accuracy_plot()
+#accuracy_plot()
