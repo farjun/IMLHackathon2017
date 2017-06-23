@@ -1,4 +1,4 @@
-import create_dataframe as data1
+import src.create_dataframe as data1
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -10,14 +10,10 @@ matrix = data1.word_matrix()
 
 
 titles = df.columns
-print(titles)
-print(len(titles))
 
-#
 a = data1.get_final_df_no_labeles().as_matrix()
 lengh = np.sum(a,1)
-
-df['__THE_LENGH_FITURE__'] = lengh
+df['length'] = lengh
 
 def get_dataframe_with_lengh_and_label():
     return df
