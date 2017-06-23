@@ -54,6 +54,10 @@ if __name__ == '__main__':
     x = vectorizer.fit_transform(all_headlines)
     df = DataFrame(x.A, columns=vectorizer.get_feature_names())
 
+    import pickle
+    with open('vocabulary.pkl', 'wb') as f:
+        pickle.dump(list(df), f)
+
     print('Processing Haaretz headlines...')
     process(haaretz_headlines['headlines'])
     print('Processing Israel Hayom headlines...')
@@ -64,19 +68,40 @@ if __name__ == '__main__':
     df['avg_word_len'] = avg_word_len
     df['dot'] = dot
 
+    with open('tags.pkl', 'wb') as f:
+        pickle.dump(tags, f)
+
     for (k, v) in tags.items():
         df[k] = v
 
     # Split into train and test sets
+    print("df shape - trainer")
+    print(df.shape)
+    df.reindex_axis(sorted(df.columns), axis=1)
+
+    with open('all_titles.pkl', 'wb') as f:
+        pickle.dump(list(df), f)
+
     x_train, x_test, y_train, y_test = train_test_split(sparse.csr_matrix(df.values),
                                                         np.append(haaretz_headlines['label'],
                                                                   israel_hayom_headlines['label']),
-                                                        test_size=0.2, random_state=42)
+                                                        test_size=0.5, random_state=42)
+
+
 
     print('Training model...')
     mlp = MLPClassifier()
     mlp.fit(x_train, y_train)
-
+    with open('mlp.pkl', 'wb') as f:
+        pickle.dump(mlp, f)
     # Print accuracy results
     print(f"Train Accuracy: {mlp.score(x_train, y_train)}")
     print(f"Test Accuracy: {mlp.score(x_test, y_test)}")
+
+    import classifier
+
+    clf = classifier.Classifier()
+    prd = clf.classify(df.values)
+    from sklearn.metrics import accuracy_score
+    score = accuracy_score(y_test, prd)
+    print(score)
