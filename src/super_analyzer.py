@@ -4,17 +4,10 @@ import numpy as np
 from scipy import sparse
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.multiclass import OneVsRestClassifier
-from sklearn.linear_model import SGDClassifier
-from sklearn.kernel_approximation import RBFSampler
-from sklearn.svm import SVC
-from sklearn.pipeline import FeatureUnion
-from sklearn.naive_bayes import GaussianNB, MultinomialNB
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.neural_network import MLPClassifier
 from pandas import DataFrame
+from nltk import pos_tag, word_tokenize
+from collections import OrderedDict
 
 
 def readFiles():
@@ -29,45 +22,63 @@ israelHayomHeadlines['label'] = 1
 
 base_df = pd.concat([haaretzHeadlines, israelHayomHeadlines])
 
-list_them_all = []
+all_headlines = []
 lengths = []
 avg_word_len = []
 dot = []
+tags = OrderedDict()
 
+i = 0
 for headline in haaretzHeadlines['Headers']:
     lengths.append(len(headline))
     word_lengths = [len(w) for w in headline]
     avg_word_len.append(sum(word_lengths) / len(word_lengths))
     dot.append(headline.count('.'))
-    list_them_all.append(headline)
+    pt = pos_tag(word_tokenize(headline))
+    for t in pt:
+        if t[1] in tags:
+            tags[t[1]][i] += 1
+        else:
+            tags[t[1]] = [1] + [0] * (len(haaretzHeadlines) + len(israelHayomHeadlines) - 1)
+    all_headlines.append(headline)
+    i += 1
+
+i = 0
 for headline in israelHayomHeadlines['Headers']:
     lengths.append(len(headline))
     word_lengths = [len(w) for w in headline]
     avg_word_len.append(sum(word_lengths) / len(word_lengths))
     dot.append(headline.count('.'))
-    list_them_all.append(headline)
+    pt = pos_tag(word_tokenize(headline))
+    for t in pt:
+        if t[1] in tags:
+            tags[t[1]][i] += 1
+        else:
+            tags[t[1]] = [1] + [0] * (len(haaretzHeadlines) + len(israelHayomHeadlines) - 1)
+    all_headlines.append(headline)
+    i += 1
 
 # pull the data into vectors
 vectorizer = CountVectorizer(ngram_range=(1, 2))
-x = vectorizer.fit_transform(list_them_all)
+x = vectorizer.fit_transform(all_headlines)
 print(x.shape)
 df = DataFrame(x.A, columns=vectorizer.get_feature_names())
-np.sum(df, 1)
 df['lengths'] = lengths
 df['avg_word_len'] = avg_word_len
 df['dot'] = dot
+for (k, v) in tags.items():
+    df[k] = v
 
 # split into train and test sets
 x_train, x_test, y_train, y_test = train_test_split(sparse.csr_matrix(df.values),
                                                     np.append(haaretzHeadlines['label'],
                                                               israelHayomHeadlines['label']),
-                                                    test_size=0.2, random_state=0)
+                                                    test_size=0.2, random_state=42)
 
-vc = VotingClassifier(estimators=[('logReg', LogisticRegression(random_state=0)),
-                                  ('rndfc', RandomForestClassifier(random_state=0))],
-                      n_jobs=4)
-
+vc = MLPClassifier()
 vc.fit(x_train, y_train)
 
 # Print the accuracy
-print(f"Accuracy: {vc.score(x_test, y_test)}")
+
+print(f"Train Accuracy: {vc.score(x_train, y_train)}")
+print(f"Test Accuracy: {vc.score(x_test, y_test)}")
