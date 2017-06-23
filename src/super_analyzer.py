@@ -98,6 +98,7 @@ if __name__ == '__main__':
     mlp.fit(x_train, y_train)
     with open('mlp.pkl', 'wb') as f:
         pickle.dump(mlp, f)
+
     # Print accuracy results
     print(f"Train Accuracy: {mlp.score(x_train, y_train)}")
     print(f"Test Accuracy: {mlp.score(x_test, y_test)}")
