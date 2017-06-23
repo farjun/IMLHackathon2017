@@ -6,8 +6,12 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 from pandas import DataFrame
-from nltk import pos_tag, word_tokenize
 from collections import OrderedDict
+
+import nltk
+
+nltk.data.path.append('../nltk_data')
+from nltk import pos_tag, word_tokenize
 
 all_headlines = None
 lengths = []
@@ -37,7 +41,8 @@ def process(headlines):
             if tag in tags:
                 tags[tag][i] += 1
             else:
-                tags[tag] = [1] + [0] * (len(all_headlines) - 1)
+                tags[tag] = [0] * len(all_headlines)
+                tags[tag][i] = 1
 
         i += 1
 
@@ -55,6 +60,7 @@ if __name__ == '__main__':
     df = DataFrame(x.A, columns=vectorizer.get_feature_names())
 
     import pickle
+
     with open('vocabulary.pkl', 'wb') as f:
         pickle.dump(list(df), f)
 
@@ -87,8 +93,6 @@ if __name__ == '__main__':
                                                                   israel_hayom_headlines['label']),
                                                         test_size=0.5, random_state=42)
 
-
-
     print('Training model...')
     mlp = MLPClassifier()
     mlp.fit(x_train, y_train)
@@ -103,5 +107,6 @@ if __name__ == '__main__':
     clf = classifier.Classifier()
     prd = clf.classify(df.values)
     from sklearn.metrics import accuracy_score
+
     score = accuracy_score(y_test, prd)
     print(score)
