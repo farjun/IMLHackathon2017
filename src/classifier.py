@@ -94,7 +94,7 @@ class Classifier(object):
                                                             test_size=0.5, random_state=42)
         self.mlp.fit(x_train, y_train)
 
-
+#
     def classify(self, X):
         """
         Recieves a list of m unclassified headlines, and predicts for each one which newspaper published it.
