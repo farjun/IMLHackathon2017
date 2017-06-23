@@ -1,0 +1,5 @@
+project.pdf - project information and methods
+classifier.py - our classifier
+nltk_data (directory) - directory of natural language data
+requirements.txt - virtualenc data
+
