@@ -1,4 +1,33 @@
 import pandas as pd
+import numpy as np
+import pandas as pd
+import re
+import src.add_lengh_try as omri
+from nltk import bigrams
+from scipy.sparse import coo_matrix, hstack, scipy
+
+#preproccessibng
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import HashingVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer
+from nltk.corpus import stopwords
+
+#algorithems
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
+from sklearn.svm import OneClassSVM
+from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LinearRegression
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.neural_network import MLPClassifier
+
+
 
 import numpy as np
 from scipy import sparse
@@ -89,7 +118,11 @@ if __name__ == '__main__':
                                                         test_size=0.5, random_state=42)
 
     print('Training model...')
-    mlp = MLPClassifier()
+    from sklearn.naive_bayes import MultinomialNB
+    from  sklearn.ensemble import VotingClassifier
+    # clf = MultinomialNB()
+    logReg = LogisticRegression(n_jobs=1)
+    mlp = VotingClassifier([('mnb',MultinomialNB()), ('vs', OneVsRestClassifier(estimator=logReg, n_jobs=2))])
     mlp.fit(x_train, y_train)
     with open('remember.pkl', 'wb') as f:
         pickle.dump((mlp, vocabulary, tags), f)
