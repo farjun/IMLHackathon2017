@@ -69,7 +69,7 @@ class Classifier(object):
 
         print('Vectorizing data...')
         vectorizer = CountVectorizer(ngram_range=(1, 2), vocabulary=vocabulary)
-        x = vectorizer.fit_transform(all_headlines)
+        x = vectorizer.fit_transform(self.all_headlines)
         df = DataFrame(x.A, columns=vectorizer.get_feature_names())
         vocabulary = list(df)
 

@@ -21,7 +21,6 @@ from pandas import DataFrame
 from collections import OrderedDict
 
 import nltk
-
 nltk.data.path.append('../nltk_data')
 from nltk import pos_tag, word_tokenize
 
@@ -44,7 +43,6 @@ class Classifier(object):
         self.israel_hayom_headlines['label'] = 1
         self.all_headlines = np.concatenate((self.haaretz_headlines['headlines'], self.israel_hayom_headlines['headlines']))
         self.mlp = MLPClassifier()
-        self.preprocessOurData()
 
     def process(self, headlines):
         i = 0
@@ -68,23 +66,35 @@ class Classifier(object):
             i += 1
 
     def preprocessOurData(self):
+        print('Fetching data...')
 
-        vectorizer = CountVectorizer(ngram_range=(1, 2))
+        print('Vectorizing data...')
+        with open('vocabulary.pkl', 'rb') as f:
+            vocabulary = pickle.load(f)
+
+        vectorizer = CountVectorizer(ngram_range=(1, 2), vocabulary=vocabulary)
         x = vectorizer.fit_transform(self.all_headlines)
         df = DataFrame(x.A, columns=vectorizer.get_feature_names())
 
-        #'Processing all headlines...'
+        print('Processing all headlines...')
         self.process(self.all_headlines)
 
+        print('Aggregating features...')
         df['lengths'] = self.lengths
         df['avg_word_len'] = self.avg_word_len
         df['dot'] = self.dot
 
-        for (k, v) in self.tags.items():
+        with open('tags.pkl', 'rb') as f:
+            saved_tags = pickle.load(f)
+
+        for (k, v) in saved_tags.items():
             if k in self.tags:
                 df[k] = self.tags[k]
             else:
                 df[k] = 0
+
+        with open('all_titles.pkl', 'rb') as f:
+            all_titles = pickle.load(f)
 
         df.reindex_axis(sorted(df.columns), axis=1)
 
@@ -94,7 +104,7 @@ class Classifier(object):
                                                             test_size=0.5, random_state=42)
         self.mlp.fit(x_train, y_train)
 
-#
+
     def classify(self, X):
         """
         Recieves a list of m unclassified headlines, and predicts for each one which newspaper published it.
@@ -116,15 +126,26 @@ class Classifier(object):
         print('Processing all headlines...')
         self.process(self.all_headlines)
 
+        print('Aggregating features...')
         df['lengths'] = self.lengths
         df['avg_word_len'] = self.avg_word_len
         df['dot'] = self.dot
 
-        for (k, v) in self.tags.items():
-            df[k] = v
+        with open('tags.pkl', 'rb') as f:
+            saved_tags = pickle.load(f)
+
+        for (k, v) in saved_tags.items():
+            if k in self.tags:
+                df[k] = self.tags[k]
+            else:
+                df[k] = 0
+
+        with open('all_titles.pkl', 'rb') as f:
+            all_titles = pickle.load(f)
 
         df.reindex_axis(sorted(df.columns), axis=1)
 
+        self.mlp.fit(x_train,y_train)
         return self.mlp.predict(df)
 
 
