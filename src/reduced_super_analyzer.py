@@ -115,7 +115,7 @@ if __name__ == '__main__':
     x_train, x_test, y_train, y_test = train_test_split(sparse.csr_matrix(df.values),
                                                         np.append(haaretz_headlines['label'],
                                                                   israel_hayom_headlines['label']),
-                                                        test_size=0.5, random_state=42)
+                                                        test_size=0.1, random_state=42)
 
     print('Training model...')
     from sklearn.naive_bayes import MultinomialNB
