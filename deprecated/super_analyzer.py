@@ -11,7 +11,7 @@ from pandas import DataFrame
 from collections import OrderedDict
 from sklearn.externals import joblib
 import os.path
-
+import joblib
 import nltk
 
 nltk.data.path.append('../nltk_data')
@@ -99,9 +99,9 @@ if __name__ == '__main__':
         df = DataFrame(x.A, columns=vectorizer.get_feature_names())
 
         print('Processing Haaretz headlines...')
-        extract_features(haaretz_headlines['headlines'])
+        extract_features(haaretz_headlines)
         print('Processing Israel Hayom headlines...')
-        extract_features(israel_hayom_headlines['headlines'])
+        extract_features(israel_hayom_headlines)
 
         print('Aggregating features...')
         df['_lengths'] = lengths
