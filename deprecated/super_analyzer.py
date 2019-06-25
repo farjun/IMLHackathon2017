@@ -49,7 +49,6 @@ def extract_features(headlines):
             else:
                 tags[tag] = [0] * len(all_headlines)
                 tags[tag][i] = 1
-
         i += 1
 
 
