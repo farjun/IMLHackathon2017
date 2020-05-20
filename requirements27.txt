@@ -73,7 +73,7 @@ GnuPGInterface==0.3.2
 gyp==0.1
 h5py==2.6.0
 html5lib==0.999
-httplib2==0.9.1
+httplib2==0.18.0
 idna==2.1
 imagesize==0.7.1
 ipaddr==2.1.11
