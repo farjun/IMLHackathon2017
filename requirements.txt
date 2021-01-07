@@ -27,7 +27,7 @@ Jinja2==2.8
 joblib==0.9.4
 Keras==1.0.7
 louis==2.6.5
-lxml==3.6.0
+lxml==4.6.2
 Mako==1.0.4
 MarkupSafe==0.23
 matplotlib==1.5.2rc2
