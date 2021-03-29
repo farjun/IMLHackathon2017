@@ -54,7 +54,7 @@ pycodestyle==2.2.0
 pycups==1.9.73
 pydot==1.0.29
 pyflakes==1.3.0
-Pygments==2.1.3
+Pygments==2.7.4
 pygobject==3.20.1
 pygpu==0.2.1
 pyinotify==0.9.6
