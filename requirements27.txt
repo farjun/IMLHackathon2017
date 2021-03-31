@@ -86,7 +86,7 @@ isodate==0.5.4
 isort==4.2.5
 jdcal==1.0
 jedi==0.10.0
-Jinja2==2.8
+Jinja2==2.11.3
 joblib==0.9.4
 jsonschema==2.5.1
 jupyter-client==4.4.0
