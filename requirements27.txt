@@ -14,7 +14,7 @@ BeautifulSoup==3.2.1
 beautifulsoup4==4.5.1
 biom-format==2.1.5
 biopython==1.67
-bottle==0.12.9
+bottle==0.12.19
 Brlapi==0.6.4
 bzr==2.8.0.dev1
 BzrTools==2.6.0
