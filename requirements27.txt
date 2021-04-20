@@ -3,7 +3,7 @@ apt-xapian-index==0.48
 arandr==0.1.9
 astroid==1.4.9
 attrs==16.0.0
-autobahn==0.10.3
+autobahn==20.12.3
 Axiom==0.7.5
 Babel==2.3.4
 backports-abc==0.4
