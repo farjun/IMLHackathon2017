@@ -45,7 +45,7 @@ openpyxl==2.3.0
 pandas==0.18.1
 pexpect==4.2.0
 Pillow==3.3.0
-protobuf==3.0.0
+protobuf==3.15.0
 psycopg2==2.6.2
 ptyprocess==0.5.1
 py==1.4.31
