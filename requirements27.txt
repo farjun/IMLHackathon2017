@@ -135,7 +135,7 @@ openpyxl==2.3.0
 openshot==1.4.3
 PAM==0.4.2
 pandas==0.18.1
-paramiko==2.0.0
+paramiko==2.10.1
 Paste==2.0.3
 PasteDeploy==1.5.2
 PasteScript==1.7.5
