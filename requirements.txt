@@ -17,7 +17,7 @@ django-session-security==2.3.2
 file-magic==0.3.0
 Flask==0.11.1
 h5py==2.6.0
-html5lib==0.999
+html5lib==0.99999999
 idna==2.1
 iotop==0.6
 ipython==2.4.1
