@@ -216,7 +216,7 @@ rabbitvcs==0.16.0
 radiotray==0.7.3
 rdflib==4.1.2
 reportbug==6.6.6
-reportlab==3.3.0
+reportlab==3.5.55
 repoze.lru==0.6
 repoze.who==2.2
 requests==2.10.0
