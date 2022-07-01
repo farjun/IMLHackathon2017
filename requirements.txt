@@ -41,7 +41,7 @@ nose-parameterized==0.3.4
 notify2==0.3
 numexpr==2.6.0
 numpy==1.11.1rc1
-openpyxl==2.3.0
+openpyxl==2.4.2
 pandas==0.18.1
 pexpect==4.2.0
 Pillow==3.3.0
