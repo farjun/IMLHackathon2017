@@ -101,7 +101,7 @@ libvirt-python==2.0.0
 lockfile==0.12.2
 Louie==1.1
 louis==2.6.5
-lxml==3.6.0
+lxml==4.9.1
 lz4==0.8.2
 M2Crypto==0.24.0
 Mako==1.0.4
